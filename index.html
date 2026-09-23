@@ -125,7 +125,7 @@ div[data-tk="skills-divider"] > span { display: none; }
 }
 @media (max-width: 980px) {
   div[data-tk="layout"] { flex-direction: column !important; }
-  /* Шапка фиксируется сверху и сворачивается при скролле сетки (высоту ставит JS) */
+  /* Шапка фиксируется сверху; открывается и закрывается только стрелкой. */
   aside[data-tk="left"] {
     position: fixed !important; top: 0; left: 0; right: 0; z-index: 90;
     width: 100% !important; overflow: hidden;
@@ -137,7 +137,11 @@ div[data-tk="skills-divider"] > span { display: none; }
   div[data-tk="fade-top"], div[data-tk="fade-bottom"] { height: 56px !important; }
   /* Кнопка сворачивания шапки видна только на мобилке */
   button[data-tk="headtoggle"] { display: flex !important; }
-  aside[data-tk="left"].tk-collapsed div[data-tk="hero"] { opacity: 0; }
+  aside[data-tk="left"].tk-collapsed div[data-tk="profile-divider"],
+  aside[data-tk="left"].tk-collapsed div[data-tk="profile"],
+  aside[data-tk="left"].tk-collapsed div[data-tk="hero"] { display: none !important; }
+  h1[data-tk="headline"] { font-size: 16px !important; line-height: 1.34 !important; max-width: 29ch !important; }
+  div[data-tk="kanji"] { font-size: 12px !important; padding-bottom: 3px !important; }
   main[data-tk="right"] { height: 100vh !important; }
   div[data-tk="viewport"] { height: auto; flex: 1 1 auto !important; }
   div[data-tk="contact-panel"] {
@@ -216,7 +220,7 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
       </div>
 
       <!-- Идентити -->
-      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-top: 18px; animation: tkFadeUp .6s .08s ease both;">
+      <div data-tk="profile" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-top: 18px; animation: tkFadeUp .6s .08s ease both;">
         <div style="display: flex; flex-direction: column; gap: 10px; min-width: 0;">
           <div data-tk="avatar" style="position: relative; width: 158px; height: 196px; flex-shrink: 0;">
             <img src="assets/portrait.jpg" alt="Илья Тищенко" width="158" height="196" style="width: 158px; height: 196px; object-fit: cover; border-radius: 13px; border: 1px solid var(--line); display: block;">
@@ -240,7 +244,7 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
 
           <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; animation: tkFadeUp .7s .15s ease both;">
             <h1 data-tk="headline" style="margin: 0; font-size: clamp(19px, 1.55vw, 24px); font-weight: 500; line-height: 1.36; letter-spacing: -.022em; text-wrap: pretty; max-width: 26ch;"><span data-en="I’m a freelance Motion Designer creating animation and visual content for brands, products and digital projects.">Я фриланс-моушн-дизайнер, создаю анимацию и визуальный контент для брендов, продуктов и цифровых проектов.</span> <span style="opacity: .5;" data-en="I work across 2D motion design, compositing, typography, product animation and advertising visuals, occasionally bringing in 3D when the project needs it.">Работаю с 2D-анимацией, композитингом, типографикой, продуктовой анимацией и рекламной графикой, иногда добавляя 3D, когда этого требует проект.</span></h1>
-            <div aria-hidden="true" style="font-family: 'Pixeloid', monospace; font-size: 16px; color: var(--dim); flex-shrink: 0; padding-bottom: 4px;">改善</div>
+            <div data-tk="kanji" aria-hidden="true" style="font-family: 'Pixeloid', monospace; font-size: 16px; color: var(--dim); flex-shrink: 0; padding-bottom: 4px;">改善</div>
           </div>
 
           <!-- разделитель НАВЫКИ -->
@@ -751,8 +755,8 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
     eng.mobile = window.innerWidth <= 980;
   }
 
-  /* ── Сворачиваемая фикс-шапка (мобилка): скролл сетки вниз — компакт,
-        вверх — разворот. Высоты замеряются без анимаций. ── */
+  /* ── Сворачиваемая фикс-шапка (мобилка): изначально компактная,
+        открывается и закрывается только стрелкой. ── */
   function initHeader() {
     eng.head = eng.head || $('aside[data-tk="left"]');
     if (!eng.head || !eng.right) return;
@@ -766,21 +770,24 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
       }
       return;
     }
+    var enteringMobile = !eng.headInit;
     var head = eng.head;
-    var hero = $('div[data-tk="hero"]');
     head.style.transition = 'none';
     head.style.height = '';
     head.classList.remove('tk-collapsed');
     eng.headExp = head.offsetHeight + 12; /* запас под стрелку-тогглер */
-    if (hero) hero.style.display = 'none';
-    eng.headCol = head.offsetHeight + 16;
-    if (hero) hero.style.display = '';
+    head.classList.add('tk-collapsed');
+    eng.headCol = head.offsetHeight + 18; /* компакт: лого, язык и отдельная зона стрелки */
+    head.classList.remove('tk-collapsed');
+    if (enteringMobile) eng.headCollapsed = true;
     if (eng.headCollapsed) head.classList.add('tk-collapsed');
     head.style.height = (eng.headCollapsed ? eng.headCol : eng.headExp) + 'px';
     head.offsetHeight; /* reflow — фиксируем стартовое значение */
     head.style.transition = 'height .45s cubic-bezier(.32,0,.15,1)';
     eng.right.style.paddingTop = (eng.headCollapsed ? eng.headCol : eng.headExp) + 'px';
     eng.right.style.transition = 'padding-top .45s cubic-bezier(.32,0,.15,1)';
+    var toggle = $('[data-tk="headtoggle"]');
+    if (toggle) toggle.setAttribute('aria-expanded', eng.headCollapsed ? 'false' : 'true');
     eng.headInit = true;
   }
 
@@ -788,6 +795,8 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
     if (!eng.headInit || eng.headCollapsed === collapsed) return;
     eng.headCollapsed = collapsed;
     eng.head.classList.toggle('tk-collapsed', collapsed);
+    var toggle = $('[data-tk="headtoggle"]');
+    if (toggle) toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
     eng.head.style.height = (collapsed ? eng.headCol : eng.headExp) + 'px';
     eng.right.style.paddingTop = (collapsed ? eng.headCol : eng.headExp) + 'px';
     /* после анимации вьюпорт стал выше/ниже — пересобрать раскладку */
@@ -948,18 +957,6 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
     var idle = !eng.reduced && !state.modalSrc && !state.contactOpen &&
       eng.hoverCount === 0 && !eng.dragging && (ts - eng.lastInput > 2600);
     if (idle) eng.tp += 0.45;
-
-    /* Сворачивание шапки от направления пользовательского скролла */
-    if (eng.headInit) {
-      var dtp = eng.tp - (eng.lastTp == null ? eng.tp : eng.lastTp);
-      eng.lastTp = eng.tp;
-      if (ts - eng.lastInput < 250 && dtp !== 0) {
-        if ((dtp > 0) !== (eng.dirAcc > 0)) eng.dirAcc = 0;
-        eng.dirAcc = (eng.dirAcc || 0) + dtp;
-        if (eng.dirAcc > 60) setHeader(true);
-        else if (eng.dirAcc < -60) setHeader(false);
-      }
-    }
 
     eng.p += (eng.tp - eng.p) * (eng.reduced ? 1 : 0.085);
     eng.vel = eng.vel * 0.82 + (eng.tp - eng.p) * 0.18;
@@ -1123,8 +1120,6 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
     $('[data-tk="cta"]').addEventListener('click', openContact);
     $('[data-tk="headtoggle"]').addEventListener('click', function () {
       if (!eng.headInit) return;
-      eng.dirAcc = 0;
-      eng.lastInput = performance.now() - 1000; /* не даём скролл-логике тут же переключить обратно */
       setHeader(!eng.headCollapsed);
     });
     $('[data-tk="contact-close"]').addEventListener('click', closeContact);
