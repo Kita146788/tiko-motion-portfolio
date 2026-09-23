@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Тищенко Илья — Моушн дизайнер. 2D и 3D анимация для брендов разного масштаба.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#0b0b0a">
+<title>Тищенко Илья — Моушн дизайнер</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles/fonts.css">
+<style>
+@font-face { font-family: 'Pixeloid'; src: url('assets/PixeloidSans.otf') format('opentype'); font-display: swap; }
+@font-face { font-family: 'Inter'; src: url('assets/Inter-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+html, body { margin: 0; padding: 0; }
+html { background: #0b0b0a; }
+body { -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
+*, *::before, *::after { box-sizing: border-box; }
+:root {
+  --bg: #0b0b0a; --panel: #0d0d0c; --card: #161614; --text: #e8e4db; --muted: #74716a;
+  --dim: #46443f; --line: rgba(255,255,255,.09); --line-strong: rgba(255,255,255,.22);
+  --grid-major: rgba(255,255,255,.024); --grid-minor: rgba(255,255,255,.0106);
+  --inv: #0b0b0a; --hoverbg: rgba(255,255,255,.07); --sheetbg: #121211; --linkbg: rgba(255,255,255,.05);
+}
+::-webkit-scrollbar { width: 0; height: 0; }
+/* Контент панели всегда поверх фоновой катаны */
+aside[data-tk="left"] > div { position: relative; z-index: 2; }
+@keyframes tkFadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes tkBlink { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
+@keyframes tkSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes tkSheetDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
+@keyframes tkSheetLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes tkSheetLeftOut { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+@keyframes tkFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tkFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes tkPop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
+/* hover-состояния (в прототипе были style-hover) */
+button[data-tk="langbtn"]:hover { border-color: var(--line-strong) !important; }
+button[data-tk="cta"] { transition: background-color .2s ease !important; }
+button[data-tk="cta"]:hover { transform: none !important; background-color: #cfccc5 !important; }
+button[data-tk="modal-close"]:hover { background: rgba(255,255,255,.12) !important; }
+button[data-tk="contact-close"]:hover { background: var(--hoverbg) !important; }
+a.tk-link { border-radius: 13px !important; transition: background-color .2s ease !important; }
+a.tk-link:hover { border-color: transparent !important; background-color: rgba(255,255,255,.09) !important; }
+img[data-tk="arrow"] { display: block; width: 14px; height: 14px; flex: 0 0 auto; }
+a.tk-link img[data-tk="arrow"] { filter: invert(1); opacity: .5; }
+div[data-tk="view-switch"] {
+  background: rgba(18,18,18,.58);
+  backdrop-filter: blur(14px) saturate(125%);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  border: 0 !important;
+  border-radius: 22px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06);
+  overflow: hidden;
+}
+button[data-tk="view-grid"], button[data-tk="view-row"] {
+  position: relative;
+  z-index: 2;
+  min-width: 88px;
+  border-radius: 18px !important;
+  background: transparent !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400;
+  letter-spacing: 0 !important;
+  transition: color .3s ease;
+}
+span[data-tk="view-thumb"] {
+  position: absolute;
+  z-index: 1;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: 18px;
+  background: rgba(232,228,219,.94);
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  transition: transform .35s cubic-bezier(.32,0,.15,1);
+  pointer-events: none;
+}
+#tk-root aside img { border-radius: 18px !important; }
+div[data-tk="card"] > div[data-tk="ratio"] { border-radius: 33px !important; }
+aside[data-tk="left"] { transform: translate(0, 0); }
+button[data-tk="langbtn"] { border-radius: 13px !important; }
+button[data-tk="langbtn"] > span { border-radius: 10px !important; }
+button[data-tk="tab-tools"], button[data-tk="tab-ai"] { border-radius: 12px !important; }
+button[data-tk="cta"] { border-radius: 13px !important; }
+div[data-tk="avatar"] { width: 158px !important; height: 196px !important; }
+div[data-tk="avatar"] img { width: 158px !important; height: 196px !important; border-radius: 13px !important; }
+div[data-tk="contact-panel"] {
+  width: 500px !important;
+  background-color: rgba(5,4,4,.68) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+button[data-tk="contact-close"],
+button[data-tk="modal-close"] {
+  border-radius: 13px !important;
+  border-style: none !important;
+  background-color: #191919 !important;
+}
+video[data-tk="modal-video"] { border-radius: 13px !important; }
+main[data-tk="right"].tk-row-mode div[data-tk="fade-top"] {
+  top: 0 !important; bottom: 0 !important; left: 0 !important; right: auto !important;
+  width: 110px !important; height: auto !important;
+  background: linear-gradient(90deg, #0b0b0a 0%, rgba(11,11,10,0) 100%) !important;
+}
+main[data-tk="right"].tk-row-mode div[data-tk="fade-bottom"] {
+  top: 0 !important; bottom: 0 !important; left: auto !important; right: 0 !important;
+  width: 110px !important; height: auto !important;
+  background: linear-gradient(270deg, #0b0b0a 0%, rgba(11,11,10,0) 100%) !important;
+}
+div[data-tk="profile-divider"] > span,
+div[data-tk="skills-divider"] > span { display: none; }
+
+@media (min-width: 1281px) {
+  aside[data-tk="left"] { width: 500px !important; }
+}
+
+/* ── Адаптив ── */
+@media (max-width: 1280px) {
+  aside[data-tk="left"] { width: 400px !important; padding: 22px 24px 18px !important; }
+  div[data-tk="contact-panel"] { width: 400px !important; }
+}
+@media (max-width: 980px) {
+  div[data-tk="layout"] { flex-direction: column !important; }
+  /* Шапка фиксируется сверху и сворачивается при скролле сетки (высоту ставит JS) */
+  aside[data-tk="left"] {
+    position: fixed !important; top: 0; left: 0; right: 0; z-index: 90;
+    width: 100% !important; overflow: hidden;
+    border-right: none !important; border-bottom: 1px solid var(--line) !important;
+    padding: 16px 20px 18px !important;
+  }
+  div[data-tk="hero"] { position: static !important; margin: 12px -20px 0 !important; padding: 0 20px !important; min-height: 240px; transition: opacity .25s ease; }
+  /* Узкие зоны растворения у кромок сетки на мобилке */
+  div[data-tk="fade-top"], div[data-tk="fade-bottom"] { height: 56px !important; }
+  /* Кнопка сворачивания шапки видна только на мобилке */
+  button[data-tk="headtoggle"] { display: flex !important; }
+  aside[data-tk="left"].tk-collapsed div[data-tk="hero"] { opacity: 0; }
+  main[data-tk="right"] { height: 100vh !important; }
+  div[data-tk="viewport"] { height: auto; flex: 1 1 auto !important; }
+  div[data-tk="contact-panel"] {
+    top: auto !important; bottom: 0 !important; width: 100% !important; height: auto !important;
+    border-right: none !important; border-top: 1px solid var(--line) !important;
+    border-radius: 14px 14px 0 0; padding: 28px 20px 34px !important;
+    justify-content: flex-start !important;
+    animation: tkSheetUp .45s cubic-bezier(.32,0,.15,1) both !important;
+  }
+  div[data-tk="avatar"], div[data-tk="avatar"] img { width: 52px !important; height: 52px !important; }
+  aside[data-tk="left"] > div { position: relative; z-index: 2; }
+}
+@media (max-width: 980px) and (orientation: landscape) and (max-height: 520px) {
+  div[data-tk="hero"] { min-height: 200px; }
+}
+/* Стрелка-тогглер шапки: вверх — свернуть, в свёрнутом виде — вниз (развернуть) */
+button[data-tk="headtoggle"] svg { transition: transform .35s ease; }
+aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform: rotate(180deg); }
+@media (min-width: 981px) and (max-height: 620px) {
+  aside[data-tk="left"] { overflow-y: auto; padding: 18px 24px 16px !important; }
+  div[data-tk="hero"] { min-height: 260px; }
+}
+@media (max-width: 520px) {
+  div[data-tk="toolbar"] { padding: 16px 16px 10px !important; }
+  div[data-tk="toolbar"] > div:first-child { display: none !important; }
+  div[data-tk="view-switch"] { bottom: 16px !important; }
+  aside[data-tk="left"] { padding: 14px 16px 16px !important; }
+  div[data-tk="hero"] { margin: 10px -16px 0 !important; padding: 0 16px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="tk-root" style="min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; position: relative; overflow: clip;">
+
+  <!-- ПРЕЛОУДЕР -->
+  <div data-tk="preloader" style="position: fixed; inset: 0; z-index: 9000; background: #0b0b0a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; transition: opacity .55s ease, visibility .55s;">
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+      <div style="width: 180px; height: 3px; background: rgba(255,255,255,.09); overflow: hidden;">
+        <div data-tk="preloader-bar" style="height: 100%; width: 0%; background: #e8e4db;"></div>
+      </div>
+      <div data-tk="preloader-pct" style="font-family: 'Pixeloid', monospace; font-size: 10px; letter-spacing: .2em; color: #74716a;">0%</div>
+    </div>
+  </div>
+
+  <!-- ФОНОВАЯ СЕТКА -->
+  <div aria-hidden="true" style="position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px), linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px); background-size: 112px 112px, 112px 112px, 28px 28px, 28px 28px;"></div>
+
+  <div data-tk="layout" style="position: relative; z-index: 1; display: flex; min-height: 100vh;">
+
+    <!-- ═══ ЛЕВАЯ ПАНЕЛЬ ═══ -->
+    <aside data-tk="left" style="flex-shrink: 0; width: 470px; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; padding: 26px 30px 22px; border-right: 1px solid var(--line); background-color: rgba(5,4,4,.52); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+
+      <!-- Верх: лого + язык -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; animation: tkFadeUp .6s ease both;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <svg width="22" height="18" viewBox="0 0 115 95" aria-hidden="true"><path d="M96.3757 9.89982V27.4374H114.392V94.1633H86.0721V46.7153L39.357 94.1633H0L67.3099 27.2199H0V0H86.0721L96.3757 9.89982Z" fill="currentColor"></path></svg>
+          <span style="font-family: 'Pixeloid', monospace; font-size: 15px; letter-spacing: .14em;">TIKO</span>
+        </div>
+        <button data-tk="langbtn" role="switch" aria-checked="false" aria-label="Язык / Language" style="position: relative; display: inline-flex; align-items: stretch; font-family: 'Pixeloid', monospace; font-size: 10px; letter-spacing: .1em; background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 2px; cursor: pointer;">
+          <span data-tk="lang-thumb" aria-hidden="true" style="position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc(50% - 2px); background: var(--text); border-radius: 3px; transition: transform .3s cubic-bezier(.32,0,.15,1);"></span>
+          <span data-tk="lang-en" style="position: relative; z-index: 1; padding: 5px 9px; color: var(--inv); transition: color .3s;">EN</span>
+          <span data-tk="lang-ru" style="position: relative; z-index: 1; padding: 5px 9px; color: var(--muted); transition: color .3s;">RU</span>
+        </button>
+      </div>
+
+      <!-- crop-метка + разделитель -->
+      <div data-tk="profile-divider" style="display: flex; align-items: center; gap: 8px; margin-top: 20px;">
+        <span style="font-family: 'Pixeloid', monospace; font-size: 9px; color: var(--dim);">+</span>
+        <div style="flex: 1; height: 1px; background: var(--line);"></div>
+        <span style="font-family: 'Pixeloid', monospace; font-size: 9px; letter-spacing: .14em; color: var(--dim);" data-en="PROFILE">ПРОФИЛЬ</span>
+        <span style="font-family: 'Pixeloid', monospace; font-size: 9px; color: var(--dim);">+</span>
+      </div>
+
+      <!-- Идентити -->
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-top: 18px; animation: tkFadeUp .6s .08s ease both;">
+        <div style="display: flex; flex-direction: column; gap: 10px; min-width: 0;">
+          <div data-tk="avatar" style="position: relative; width: 158px; height: 196px; flex-shrink: 0;">
+            <img src="assets/portrait.jpg" alt="Илья Тищенко" width="158" height="196" style="width: 158px; height: 196px; object-fit: cover; border-radius: 13px; border: 1px solid var(--line); display: block;">
+          </div>
+          <div style="min-width: 0;">
+            <div style="font-size: 15.5px; font-weight: 600; letter-spacing: -.01em;" data-en="Ilya Tishchenko">Тищенко Илья</div>
+            <div style="font-size: 12.5px; font-weight: 300; color: var(--muted); margin-top: 2px;" data-en="Motion designer, Earth">Моушн дизайнер с Земли</div>
+          </div>
+        </div>
+        <div style="text-align: right; font-family: 'Pixeloid', monospace; font-size: 9.5px; line-height: 1.7; letter-spacing: .1em; color: var(--muted);">
+          <div data-en="50+ PROJECTS">50+ ПРОЕКТОВ</div>
+          <div data-en="3+ YRS EXP">3+ ГОДА ОПЫТА</div>
+        </div>
+      </div>
+
+      <!-- Герой-зона -->
+      <div data-tk="hero" style="position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; margin: 18px -30px 0; padding: 0 30px;">
+
+        <!-- Контент поверх -->
+        <div style="position: relative; z-index: 1; display: flex; flex-direction: column; gap: 18px;">
+
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; animation: tkFadeUp .7s .15s ease both;">
+            <h1 data-tk="headline" style="margin: 0; font-size: clamp(19px, 1.55vw, 24px); font-weight: 500; line-height: 1.36; letter-spacing: -.022em; text-wrap: pretty; max-width: 26ch;"><span data-en="I’m a freelance Motion Designer creating animation and visual content for brands, products and digital projects.">Я фриланс-моушн-дизайнер, создаю анимацию и визуальный контент для брендов, продуктов и цифровых проектов.</span> <span style="opacity: .5;" data-en="I work across 2D motion design, compositing, typography, product animation and advertising visuals, occasionally bringing in 3D when the project needs it.">Работаю с 2D-анимацией, композитингом, типографикой, продуктовой анимацией и рекламной графикой, иногда добавляя 3D, когда этого требует проект.</span></h1>
+            <div aria-hidden="true" style="font-family: 'Pixeloid', monospace; font-size: 16px; color: var(--dim); flex-shrink: 0; padding-bottom: 4px;">改善</div>
+          </div>
+
+          <!-- разделитель НАВЫКИ -->
+          <div data-tk="skills-divider" style="display: flex; align-items: center; gap: 8px; animation: tkFadeUp .7s .22s ease both;">
+            <span style="font-family: 'Pixeloid', monospace; font-size: 9px; color: var(--dim);">+</span>
+            <div style="flex: 1; height: 1px; background: var(--line);"></div>
+            <div style="display: flex; gap: 2px;">
+              <button data-tk="tab-tools" style="font-family: 'Pixeloid', monospace; font-size: 9.5px; letter-spacing: .12em; padding: 6px 10px; border: 1px solid var(--line-strong); border-radius: 4px; background: transparent; color: var(--text); cursor: pointer;" data-en="TOOLS">ИНСТРУМЕНТЫ</button>
+              <button data-tk="tab-ai" style="font-family: 'Pixeloid', monospace; font-size: 9.5px; letter-spacing: .12em; padding: 6px 10px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: var(--muted); cursor: pointer;" data-en="AI">ИИ</button>
+            </div>
+          </div>
+
+          <!-- скиллы -->
+          <div style="position: relative; animation: tkFadeUp .7s .28s ease both;">
+            <div data-tk="panel-tools" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px;">
+              <div><div style="font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>After Effects</span></div><div style="height: 2px; background: var(--linkbg);"><div data-tk="fill" data-w="90%" style="height: 100%; width: 0; background: var(--text); transition: width .8s cubic-bezier(.25,.46,.45,.94);"></div></div></div>
+              <div><div style="font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>Blender</span></div><div style="height: 2px; background: var(--linkbg);"><div data-tk="fill" data-w="50%" style="height: 100%; width: 0; background: var(--text); transition: width .8s cubic-bezier(.25,.46,.45,.94);"></div></div></div>
+              <div><div style="font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>Illustrator</span></div><div style="height: 2px; background: var(--linkbg);"><div data-tk="fill" data-w="60%" style="height: 100%; width: 0; background: var(--text); transition: width .8s cubic-bezier(.25,.46,.45,.94);"></div></div></div>
+              <div><div style="font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>Figma</span></div><div style="height: 2px; background: var(--linkbg);"><div data-tk="fill" data-w="70%" style="height: 100%; width: 0; background: var(--text); transition: width .8s cubic-bezier(.25,.46,.45,.94);"></div></div></div>
+            </div>
+            <div data-tk="panel-ai" style="display: none; grid-template-columns: 1fr 1fr; gap: 14px 18px;">
+              <div><div style="font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>Claude Code</span></div><div style="height: 2px; background: var(--linkbg);"><div data-tk="fill" data-w="60%" style="height: 100%; width: 0; background: var(--text); transition: width .8s cubic-bezier(.25,.46,.45,.94);"></div></div></div>
+              <div><div style="font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>Chat GPT</span></div><div style="height: 2px; background: var(--linkbg);"><div data-tk="fill" data-w="68%" style="height: 100%; width: 0; background: var(--text); transition: width .8s cubic-bezier(.25,.46,.45,.94);"></div></div></div>
+              <div><div style="font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>Recraft</span></div><div style="height: 2px; background: var(--linkbg);"><div data-tk="fill" data-w="50%" style="height: 100%; width: 0; background: var(--text); transition: width .8s cubic-bezier(.25,.46,.45,.94);"></div></div></div>
+              <div><div style="font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between;"><span>Flashboards</span></div><div style="height: 2px; background: var(--linkbg);"><div data-tk="fill" data-w="40%" style="height: 100%; width: 0; background: var(--text); transition: width .8s cubic-bezier(.25,.46,.45,.94);"></div></div></div>
+            </div>
+          </div>
+
+          <!-- низ панели -->
+          <div style="display: flex; align-items: center; padding-top: 4px; animation: tkFadeUp .7s .34s ease both;">
+            <button data-tk="cta" style="display: inline-flex; width: 100%; align-items: center; justify-content: center; gap: 9px; font-family: 'Pixeloid', monospace; font-size: 10.5px; letter-spacing: .14em; padding: 12px 18px; border-radius: 4px; border: 1px solid var(--line-strong); background: var(--text); color: var(--inv); cursor: pointer; transition: background-color .2s ease;">
+              <span data-en="CONTACT ME">СВЯЗАТЬСЯ</span>
+              <img data-tk="arrow" src="assets/arrow-up-right.svg" alt="" aria-hidden="true">
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Тогглер шапки (только мобилка): тап — свернуть/развернуть -->
+      <button data-tk="headtoggle" aria-label="Свернуть или развернуть шапку" style="display: none; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); z-index: 6; width: 72px; height: 30px; align-items: center; justify-content: center; background: transparent; border: none; color: var(--muted); cursor: pointer; padding: 0;">
+        <svg width="16" height="9" viewBox="0 0 16 9" fill="none" aria-hidden="true"><path d="M1.5 7.5L8 1.5L14.5 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </button>
+
+    </aside>
+
+    <!-- ═══ ПРАВАЯ ЧАСТЬ / КИНЕТИЧЕСКАЯ СЕТКА ═══ -->
+    <main data-tk="right" style="flex: 1; min-width: 0; position: relative; display: flex; flex-direction: column; height: 100vh;">
+
+      <!-- Тулбар -->
+      <div data-tk="toolbar" style="position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 24px 28px 12px; z-index: 6; pointer-events: none; animation: tkFadeUp .6s .1s ease both;">
+        <div style="font-family: 'Pixeloid', monospace; font-size: 9.5px; letter-spacing: .16em; color: var(--muted);" data-en="SELECTED WORK">ИЗБРАННЫЕ РАБОТЫ</div>
+        <div style="font-family: 'Pixeloid', monospace; font-size: 8.5px; letter-spacing: .2em; color: var(--dim);" data-en="SCROLL / DRAG">СКРОЛЛ / ПЕРЕТАСКИВАНИЕ</div>
+        <div data-tk="count" style="font-family: 'Pixeloid', monospace; font-size: 9.5px; letter-spacing: .16em; color: var(--dim);">[ 23 ] ∞</div>
+      </div>
+
+      <!-- Вьюпорт бесконечной сетки -->
+      <div data-tk="viewport" style="position: relative; flex: 1; min-height: 0; overflow: hidden; touch-action: none; cursor: grab; outline: none;">
+        <div data-tk="cards" style="position: relative; height: 100%;"></div>
+
+        <!-- Растворение к краям -->
+        <div aria-hidden="true" data-tk="fade-top" style="position: absolute; left: 0; right: 0; top: 0; height: 110px; z-index: 4; pointer-events: none; background: linear-gradient(180deg, #0b0b0a 0%, rgba(11,11,10,0) 100%);"></div>
+        <div aria-hidden="true" data-tk="fade-bottom" style="position: absolute; left: 0; right: 0; bottom: 0; height: 110px; z-index: 4; pointer-events: none; background: linear-gradient(0deg, #0b0b0a 0%, rgba(11,11,10,0) 100%);"></div>
+      </div>
+
+      <div data-tk="view-switch" role="group" aria-label="Режим отображения работ" style="position: absolute; left: calc(50% - 24px); bottom: 22px; transform: translateX(-50%); z-index: 120; display: inline-flex; gap: 0; padding: 4px; border: 0; border-radius: 22px; pointer-events: auto; animation: tkFadeUp .6s .2s ease both;">
+        <span data-tk="view-thumb" aria-hidden="true" style="transform: translateX(100%);"></span>
+        <button data-tk="view-grid" aria-pressed="false" style="position: relative; z-index: 2; min-width: 88px; font-family: 'Inter', sans-serif; font-size: 12px; padding: 10px 14px; border: 0; border-radius: 18px; background: transparent; color: var(--muted); cursor: pointer;" data-en="GRID">СЕТКА</button>
+        <button data-tk="view-row" aria-pressed="true" style="position: relative; z-index: 2; min-width: 88px; font-family: 'Inter', sans-serif; font-size: 12px; padding: 10px 14px; border: 0; border-radius: 18px; background: transparent; color: var(--inv); cursor: pointer;" data-en="ROW">РЯД</button>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ═══ МОДАЛКА ВИДЕО ═══ -->
+  <div data-tk="modal" role="dialog" aria-modal="true" style="display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(5,5,4,.86); backdrop-filter: blur(6px); align-items: center; justify-content: center; animation: tkFadeIn .25s ease both;">
+    <div style="position: relative; animation: tkPop .3s cubic-bezier(.25,.46,.45,.94) both;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+        <div data-tk="modal-title" style="font-family: 'Pixeloid', monospace; font-size: 9.5px; letter-spacing: .16em; color: rgba(255,255,255,.55); text-transform: uppercase;"></div>
+        <button data-tk="modal-close" aria-label="Закрыть" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid rgba(255,255,255,.25); background: transparent; color: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+      </div>
+      <video data-tk="modal-video" controls autoplay loop playsinline style="display: block; max-width: min(90vw, 1100px); max-height: 78vh; border-radius: 8px; border: 1px solid rgba(255,255,255,.14); background: #000;"></video>
+    </div>
+  </div>
+
+  <!-- ═══ КОНТАКТЫ ═══ -->
+  <div data-tk="contact" role="dialog" aria-modal="true" style="display: none; position: fixed; inset: 0; z-index: 2000;">
+    <div data-tk="contact-backdrop" style="position: absolute; inset: 0; background: rgba(5,5,4,.4); animation: tkFadeIn .35s ease both;"></div>
+    <div data-tk="contact-panel" style="position: absolute; top: 0; bottom: 0; left: 0; width: 500px; background-color: rgba(5,4,4,.68); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-right: 1px solid var(--line); padding: 44px 32px; display: flex; flex-direction: column; justify-content: center; animation: tkSheetLeft .45s cubic-bezier(.32,0,.15,1) both;">
+      <button data-tk="contact-close" aria-label="Закрыть" style="position: absolute; top: 22px; right: 22px; width: 34px; height: 34px; border-radius: 4px; border: 1px solid var(--line); background: transparent; color: var(--text); cursor: pointer; font-size: 13px;">✕</button>
+      <div style="font-family: 'Pixeloid', monospace; font-size: 9.5px; letter-spacing: .18em; color: var(--muted); margin-bottom: 12px;" data-en="[ CONTACT ]">[ КОНТАКТ ]</div>
+      <div style="font-size: 24px; font-weight: 500; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 28px;" data-en="Let's work together">Давайте поработаем вместе</div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <a class="tk-link" href="https://t.me/Iliyasti" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 14px; padding: 15px 16px; border-radius: 8px; background: var(--linkbg); border: 1px solid transparent; text-decoration: none; color: var(--text); transition: border-color .2s;">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1.108 7.617C5.4 5.768 8.262 4.55 9.694 3.961c4.088-1.682 4.938-1.974 5.492-1.984.68-.011.86.551.804 1.137-.221 2.302-1.18 7.887-1.668 10.465-.43 2.277-1.958 1.292-3.338.397-1.296-.84-2.028-1.362-3.286-2.182-1.453-.947-.511-1.467.317-2.318.217-.223 3.984-3.61 4.057-3.918.06-.256-.167-.333-.373-.286-.13.029-2.2 1.382-6.21 4.058-.588.399-1.12.593-1.597.583-.66-.014-2.26-.583-3.88-1.492-.097-.277.399-.53 1.096-.804z" fill="currentColor"></path></svg>
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 14px; font-weight: 500;">Telegram</span><span style="font-family: 'Pixeloid', monospace; font-size: 9px; letter-spacing: .1em; color: var(--muted);">@ILIYASTI</span></span>
+          <img data-tk="arrow" src="assets/arrow-up-right.svg" alt="" aria-hidden="true">
+        </a>
+        <a class="tk-link" href="https://wa.me/996550271736" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 14px; padding: 15px 16px; border-radius: 8px; background: var(--linkbg); border: 1px solid transparent; text-decoration: none; color: var(--text); transition: border-color .2s;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.3-1.6A12 12 0 0 0 12 24c6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.5-8.5zm-8.5 18.4a9.9 9.9 0 0 1-5-1.4l-.4-.2-3.7 1 1-3.6-.3-.4A9.9 9.9 0 0 1 2 12C2 6.5 6.5 2 12 2s10 4.5 10 10-4.5 10-10 10zm5.5-7.4c-.3-.1-1.8-.9-2.1-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.6c.1-.2.1-.3.2-.5 0-.2 0-.4-.1-.5-.1-.1-.7-1.7-1-2.4-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.5 5.5 4.9.8.3 1.4.5 1.8.6.8.3 1.5.2 2 .1.6-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3z" fill="currentColor"></path></svg>
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 14px; font-weight: 500;">WhatsApp</span><span style="font-family: 'Pixeloid', monospace; font-size: 9px; letter-spacing: .1em; color: var(--muted);">+996 550 271 736</span></span>
+          <img data-tk="arrow" src="assets/arrow-up-right.svg" alt="" aria-hidden="true">
+        </a>
+        <a class="tk-link" href="mailto:iliastis17@gmail.com" style="display: flex; align-items: center; gap: 14px; padding: 15px 16px; border-radius: 8px; background: var(--linkbg); border: 1px solid transparent; text-decoration: none; color: var(--text); transition: border-color .2s;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" stroke="currentColor" stroke-width="1.8"></rect><path d="M2 8l10 7 10-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 14px; font-weight: 500;">Email</span><span style="font-family: 'Pixeloid', monospace; font-size: 9px; letter-spacing: .1em; color: var(--muted);">ILIASTIS17@GMAIL.COM</span></span>
+          <img data-tk="arrow" src="assets/arrow-up-right.svg" alt="" aria-hidden="true">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DATA = [
+    { ru: 'Анимация лоудера', en: 'Loader animation', tag: 'P2P Chat', ratio: 'landscape', src: 'videos/p2p-loader.mp4' },
+    { ru: 'Обложка кейса', en: 'Case cover', tag: 'Bonduelle', ratio: 'landscape', src: 'videos/bonduelle-case-cover.mp4' },
+    { ru: 'Анимация лого', en: 'Logo animation', tag: 'Max Burger', ratio: 'portrait', src: 'videos/logo-max-burger.mp4' },
+    { ru: 'Анимация лого', en: 'Logo animation', tag: 'Rucola', ratio: 'square', src: 'videos/logo-rucola.mp4' },
+    { ru: '3D-анимация мерча', en: '3D merch animation', tag: 'Branding Group / Bonduelle', ratio: 'landscape', src: 'videos/3d-merch-bonduelle.mp4' },
+    { ru: 'Анимация персонажа', en: 'Character animation', tag: 'Personal', ratio: 'square', src: 'videos/character.mp4' },
+    { ru: 'Анимация баннера', en: 'Banner animation', tag: 'Sibur', ratio: 'portrait', src: 'videos/banner-sibur.mp4' },
+    { ru: 'Анимация для LED экрана', en: 'LED screen animation', tag: 'Magnit Groupe', ratio: 'landscape', src: 'videos/led-magnit.mp4' },
+    { ru: 'Анимация баннера', en: 'Banner animation', tag: 'Elite Invest', ratio: 'portrait', src: 'videos/banner-elite-invest.mp4' },
+    { ru: 'Анимация карточки товара', en: 'Product card animation', tag: 'Ozon seller', ratio: 'portrait', src: 'videos/card-ozon-2.mp4' },
+    { ru: 'Анимация лого', en: 'Logo animation', tag: 'Элит хаус', ratio: 'portrait', src: 'videos/logo-elite-house.mp4' },
+    { ru: 'Анимация для LED экрана', en: 'LED screen animation', tag: 'Star Coffee', ratio: 'landscape', src: 'videos/led-coffee-stars.mp4' },
+    { ru: 'Анимация стикеров', en: 'Sticker animation', tag: 'Branding Group / Bonduelle', ratio: 'square', src: 'videos/stickers-bonduelle.mp4' },
+    { ru: 'Анимация баннера', en: 'Banner animation', tag: 'Sibur', ratio: 'square', src: 'videos/banner-sibur-square.mp4' },
+    { ru: 'Анимация баннера', en: 'Banner animation', tag: 'Max Burger', ratio: 'landscape', src: 'videos/banner-max-burger.mp4' },
+    { ru: 'Анимация баннера', en: 'Banner animation', tag: 'BEKAY', ratio: 'portrait', src: 'videos/banner-bekay.mp4' },
+    { ru: 'Анимация мерча', en: 'Merch animation', tag: 'Bonduelle', ratio: 'square', src: 'videos/merch-bonduelle.mp4' },
+    { ru: 'Анимация карточки товара', en: 'Product card animation', tag: 'Ozon seller', ratio: 'portrait', src: 'videos/card-ozon.mp4' },
+    { ru: 'Анимация обложки', en: 'Cover animation', tag: 'Magnit Tech', ratio: 'landscape', src: 'videos/cover-magnit-tech.mp4' },
+    { ru: 'Анимация карточки товара', en: 'Product card animation', tag: 'Wildberries seller', ratio: 'portrait', src: 'videos/card-wildberries.mp4' },
+    { ru: 'Анимация приложения', en: 'App animation', tag: 'Челнок', ratio: 'portrait', src: 'videos/app-chelnok.mp4' },
+    { ru: 'Рекламная анимация', en: 'Advertising animation', tag: 'Salih / Bubble', ratio: 'portrait', src: 'videos/salih-bubble.mp4' },
+    { ru: 'Анимация стикеров', en: 'Sticker animation', tag: 'Shelby', ratio: 'square', src: 'videos/stickers-shelby.mp4' }
+  ];
+
+  /* Реальные пропорции файлов — карточки сразу строятся без обрезания. */
+  var VIDEO_AR = [
+    1920/1080, 1920/1080, 608/1080, 1920/1080, 826/1080, 692/1080,
+    826/1080, 1080/1550, 608/1080, 810/1080, 608/1080, 864/1080,
+    1868/1080, 720/942, 1920/1080, 1080/1080, 1280/720, 810/1080,
+    1920/1080, 810/1080, 1080/1920, 1080/1920, 1080/1080
+  ];
+
+  /* Первые кейсы идут в заданном порядке, остальные сохраняют исходную очередь. */
+  var FEATURED_ORDER = [11, 12, 10, 6, 7, 1, 22, 17];
+  var CASE_ORDER = FEATURED_ORDER.slice();
+  for (var caseNo = 1; caseNo <= DATA.length; caseNo++) {
+    if (FEATURED_ORDER.indexOf(caseNo) === -1) CASE_ORDER.push(caseNo);
+  }
+  var ORIGINAL_DATA = DATA.slice();
+  var ORIGINAL_VIDEO_AR = VIDEO_AR.slice();
+  DATA = CASE_ORDER.map(function (number) {
+    var item = ORIGINAL_DATA[number - 1];
+    item.num = number;
+    return item;
+  });
+  VIDEO_AR = CASE_ORDER.map(function (number) { return ORIGINAL_VIDEO_AR[number - 1]; });
+
+  var state = { lang: 'ru', view: 'row', modalSrc: null, contactOpen: false };
+  var eng = {
+    p: 0, tp: 0, vel: 0, mx: 0, my: 0, cmx: 0, cmy: 0,
+    raf: null, ready: false, dragging: false, dragDist: 0,
+    hoverCount: 0, loadActive: 0, loadQueue: [],
+    lastInput: performance.now(), t0: 0, frameCount: 0
+  };
+
+  function $(sel) { return document.querySelector(sel); }
+
+  /* ── Типограф: подклеивает предлоги/союзы/частицы к следующему слову ── */
+  var TYPO_RE = /(^|[\s(«"])(в|во|и|а|но|не|ни|у|о|об|обо|с|со|к|ко|на|за|по|из|изо|от|до|для|при|без|под|над|про|то|же|ли|бы|как|что|или|её|его|их|a|an|the|of|in|on|at|to|for|by|or|and|with|i)\s+/gi;
+  function typo(s) {
+    if (!s) return s;
+    s = s.replace(TYPO_RE, '$1$2 ');
+    s = s.replace(TYPO_RE, '$1$2 ');
+    s = s.replace(/\s+—/g, ' —');
+    return s;
+  }
+
+  function applyLang(lang) {
+    var nodes = document.querySelectorAll('#tk-root [data-en]');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (!el.dataset.ru) el.dataset.ru = el.textContent;
+      el.textContent = typo(lang === 'en' ? el.dataset.en : el.dataset.ru);
+    }
+    /* Тумблер: ползунок едет к активному языку, подписи перекрашиваются */
+    var lb = $('[data-tk="langbtn"]');
+    if (lb) {
+      lb.setAttribute('aria-checked', lang === 'ru' ? 'true' : 'false');
+      var th = $('[data-tk="lang-thumb"]');
+      var en = $('[data-tk="lang-en"]');
+      var ru = $('[data-tk="lang-ru"]');
+      if (th) th.style.transform = lang === 'ru' ? 'translateX(100%)' : 'translateX(0)';
+      if (en) en.style.color = lang === 'en' ? 'var(--inv)' : 'var(--muted)';
+      if (ru) ru.style.color = lang === 'ru' ? 'var(--inv)' : 'var(--muted)';
+    }
+    document.documentElement.lang = lang;
+  }
+
+  /* ── Прелоудер: ползёт до 90%, на готовности движка добивает до 100 и тает ── */
+  function bootPreloader() {
+    var pct = 0;
+    var t = setInterval(function () {
+      var bar = $('[data-tk="preloader-bar"]');
+      var num = $('[data-tk="preloader-pct"]');
+      if (!bar) return;
+      var target = eng.booted ? 100 : 90;
+      pct = Math.min(target, pct + (target - pct) * 0.13 + 1.2);
+      bar.style.width = pct + '%';
+      if (num) num.textContent = Math.round(pct) + '%';
+      if (pct >= 99.5) {
+        clearInterval(t);
+        bar.style.width = '100%';
+        if (num) num.textContent = '100%';
+        setTimeout(killPreloader, 250);
+      }
+    }, 50);
+  }
+
+  function killPreloader() {
+    var p = $('[data-tk="preloader"]');
+    if (!p) return;
+    p.style.opacity = '0';
+    p.style.visibility = 'hidden';
+    setTimeout(function () { p.style.display = 'none'; }, 600);
+  }
+
+  /* ── Карточки ── */
+  function buildCards() {
+    var cont = $('[data-tk="cards"]');
+    var html = '';
+    for (var i = 0; i < DATA.length; i++) {
+      var d = DATA[i];
+      var caseNumber = d.num || (i + 1);
+      var num = (caseNumber < 10 ? '0' : '') + caseNumber;
+      html +=
+        '<div data-tk="card" data-ratio="' + d.ratio + '" data-idx="' + i + '" style="position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; will-change: transform, filter, opacity;">' +
+          '<div data-tk="ratio" style="position: relative; overflow: hidden; border-radius: 10px; background: var(--card); border: 1px solid var(--line); transition: border-color .25s ease;">' +
+            '<video data-src="' + d.src + '" muted loop playsinline preload="none" aria-label="' + d.ru + '" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"></video>' +
+          '</div>' +
+          '<div style="display: flex; align-items: baseline; gap: 8px; padding: 7px 2px 0;">' +
+            '<span style="font-family: \'Pixeloid\', monospace; font-size: 8.5px; letter-spacing: .1em; color: var(--dim); flex-shrink: 0;">' + num + '</span>' +
+            '<span data-en="' + d.en + '" style="flex: 1; min-width: 0; font-size: 12px; font-weight: 500; letter-spacing: -.01em; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.ru + '</span>' +
+            '<span style="font-family: \'Pixeloid\', monospace; font-size: 8px; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; white-space: nowrap; flex-shrink: 0;">' + d.tag + '</span>' +
+          '</div>' +
+        '</div>';
+    }
+    cont.innerHTML = html;
+  }
+
+  function syncViewSwitch() {
+    var grid = $('[data-tk="view-grid"]');
+    var row = $('[data-tk="view-row"]');
+    var thumb = $('[data-tk="view-thumb"]');
+    var isRow = state.view === 'row';
+    if (grid) {
+      grid.setAttribute('aria-pressed', isRow ? 'false' : 'true');
+      grid.style.color = isRow ? 'var(--muted)' : 'var(--inv)';
+    }
+    if (row) {
+      row.setAttribute('aria-pressed', isRow ? 'true' : 'false');
+      row.style.color = isRow ? 'var(--inv)' : 'var(--muted)';
+    }
+    if (thumb) thumb.style.transform = isRow ? 'translateX(100%)' : 'translateX(0)';
+  }
+
+  function setView(mode) {
+    if (mode !== 'grid' && mode !== 'row') return;
+    state.view = mode;
+    eng.p = 0; eng.tp = 0; eng.vel = 0; eng.lastTp = null;
+    syncViewSwitch();
+    if (eng.vp) buildLayout();
+  }
+
+  /* ── Модалка видео ── */
+  function openModal(i) {
+    if (eng.dragDist > 10) return;
+    var d = DATA[i];
+    state.modalSrc = d.src;
+    var m = $('[data-tk="modal"]');
+    $('[data-tk="modal-title"]').textContent = (state.lang === 'en' ? d.en : d.ru) + ' — ' + d.tag;
+    var v = $('[data-tk="modal-video"]');
+    v.src = d.src;
+    m.style.display = 'flex';
+    v.play().catch(function () {});
+  }
+
+  function closeModal() {
+    state.modalSrc = null;
+    var m = $('[data-tk="modal"]');
+    var v = $('[data-tk="modal-video"]');
+    v.pause();
+    v.removeAttribute('src');
+    v.load();
+    m.style.display = 'none';
+  }
+
+  /* ── Контакт-шторка ── */
+  function openContact() {
+    clearTimeout(eng.contactCloseT);
+    state.contactOpen = true;
+    var contact = $('[data-tk="contact"]');
+    var panel = $('[data-tk="contact-panel"]');
+    var backdrop = $('[data-tk="contact-backdrop"]');
+    contact.style.display = 'block';
+    contact.style.pointerEvents = 'auto';
+    panel.style.animation = window.innerWidth <= 980
+      ? 'tkSheetUp .45s cubic-bezier(.32,0,.15,1) both'
+      : 'tkSheetLeft .45s cubic-bezier(.32,0,.15,1) both';
+    backdrop.style.animation = 'tkFadeIn .35s ease both';
+  }
+  function closeContact() {
+    if (!state.contactOpen) return;
+    state.contactOpen = false;
+    var contact = $('[data-tk="contact"]');
+    var panel = $('[data-tk="contact-panel"]');
+    var backdrop = $('[data-tk="contact-backdrop"]');
+    contact.style.pointerEvents = 'none';
+    panel.style.animation = window.innerWidth <= 980
+      ? 'tkSheetDown .45s cubic-bezier(.32,0,.15,1) both'
+      : 'tkSheetLeftOut .45s cubic-bezier(.32,0,.15,1) both';
+    backdrop.style.animation = 'tkFadeOut .35s ease both';
+    clearTimeout(eng.contactCloseT);
+    eng.contactCloseT = setTimeout(function () {
+      if (!state.contactOpen) contact.style.display = 'none';
+    }, 470);
+  }
+
+  /* ── Табы скиллов ── */
+  function setTab(tab) {
+    var tools = $('[data-tk="panel-tools"]');
+    var ai = $('[data-tk="panel-ai"]');
+    var bt = $('[data-tk="tab-tools"]');
+    var ba = $('[data-tk="tab-ai"]');
+    if (!tools || !ai) return;
+    var showTools = tab === 'tools';
+    tools.style.display = showTools ? 'grid' : 'none';
+    ai.style.display = showTools ? 'none' : 'grid';
+    bt.style.color = showTools ? 'var(--text)' : 'var(--muted)';
+    bt.style.borderColor = showTools ? 'var(--line-strong)' : 'transparent';
+    ba.style.color = showTools ? 'var(--muted)' : 'var(--text)';
+    ba.style.borderColor = showTools ? 'transparent' : 'var(--line-strong)';
+    var panel = showTools ? tools : ai;
+    /* стаггер-анимация пунктов: въезжают снизу с лёгкой задержкой друг за другом */
+    var items = panel.children;
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      it.style.transition = 'none';
+      it.style.opacity = '0';
+      it.style.transform = 'translateY(10px)';
+    }
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        for (var i = 0; i < items.length; i++) {
+          var it = items[i];
+          it.style.transition = 'opacity .4s ease ' + (i * 70) + 'ms, transform .45s cubic-bezier(.25,.46,.45,.94) ' + (i * 70) + 'ms';
+          it.style.opacity = '1';
+          it.style.transform = 'translateY(0)';
+        }
+      });
+    });
+    animateFills(panel);
+  }
+
+  function animateFills(panel) {
+    var fills = panel.querySelectorAll('[data-tk="fill"]');
+    for (var i = 0; i < fills.length; i++) {
+      (function (f) {
+        f.style.width = '0';
+        requestAnimationFrame(function () { requestAnimationFrame(function () { f.style.width = f.dataset.w; }); });
+      })(fills[i]);
+    }
+  }
+
+  function syncFills() {
+    var fills = document.querySelectorAll('[data-tk="fill"]');
+    for (var i = 0; i < fills.length; i++) {
+      (function (f) {
+        requestAnimationFrame(function () { if (f.style.width !== f.dataset.w) f.style.width = f.dataset.w; });
+        setTimeout(function () {
+          if (f.getBoundingClientRect().width < 2) { f.style.transition = 'none'; f.style.width = f.dataset.w; }
+        }, 1000);
+      })(fills[i]);
+    }
+  }
+
+  /* ═══ КИНЕТИЧЕСКИЙ ДВИЖОК СЕТКИ ═══
+     Бесконечный вертикальный луп. Три колонки с разной скоростью (параллакс),
+     рваная раскладка (ширина/прижим/наклон у каждой карточки свои),
+     к верхней и нижней кромке карточки уменьшаются, блюрятся и тают. */
+
+  function initEngine() {
+    eng.vp = $('[data-tk="viewport"]');
+    eng.cont = $('[data-tk="cards"]');
+    eng.right = $('[data-tk="right"]');
+    eng.reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var fr = function (n) { var x = Math.sin(n) * 43758.5453; return x - Math.floor(x); };
+    var nodes = [].slice.call(document.querySelectorAll('[data-tk="card"]'));
+    eng.cards = nodes.map(function (el, i) {
+      var c = {
+        el: el, i: i,
+        video: el.querySelector('video'),
+        ratioEl: el.querySelector('[data-tk="ratio"]'),
+        r: el.dataset.ratio,
+        nativeAr: VIDEO_AR[i] || 1,
+        r1: fr(i * 12.9898), r2: fr(i * 78.233), r3: fr(i * 39.425),
+        hov: 0, hv: 0, queued: false, loaded: false, lastBlur: -1, lastOff: -1
+      };
+      el.addEventListener('mouseenter', function () { c.hov = 1; eng.hoverCount++; if (c.ratioEl) c.ratioEl.style.borderColor = 'var(--line-strong)'; });
+      el.addEventListener('mouseleave', function () { c.hov = 0; eng.hoverCount = Math.max(0, eng.hoverCount - 1); if (c.ratioEl) c.ratioEl.style.borderColor = 'var(--line)'; });
+      el.addEventListener('click', function () { openModal(i); });
+      var onReady = function () {
+        c.loaded = true;
+        var v = c.video;
+        /* реальные пропорции видео: ширина фикс., высота подстраивается */
+        if (v.videoWidth && v.videoHeight) {
+          c.vidAr = v.videoWidth + ' / ' + v.videoHeight;
+          c.nativeAr = v.videoWidth / v.videoHeight;
+          if (c.ratioEl && !eng.rowHorizontal) c.ratioEl.style.aspectRatio = c.vidAr;
+          scheduleReflow();
+        }
+      };
+      if (c.video) {
+        if (c.video.readyState >= 2) onReady();
+        else c.video.addEventListener('loadeddata', onReady, { once: true });
+      }
+      return c;
+    });
+    eng.n = eng.cards.length;
+    syncViewSwitch();
+
+    /* Параллакс по курсору */
+    document.addEventListener('mousemove', function (ev) {
+      var r = eng.vp.getBoundingClientRect();
+      eng.mx = Math.max(-0.5, Math.min(0.5, (ev.clientX - r.left) / Math.max(1, r.width) - 0.5));
+      eng.my = Math.max(-0.5, Math.min(0.5, (ev.clientY - r.top) / Math.max(1, r.height) - 0.5));
+    }, { passive: true });
+
+    /* Колесо: бесконечный кинетический скролл */
+    eng.right.addEventListener('wheel', function (ev) {
+      ev.preventDefault();
+      eng.lastInput = performance.now();
+      var delta = eng.rowHorizontal && Math.abs(ev.deltaX) > Math.abs(ev.deltaY) ? ev.deltaX : ev.deltaY;
+      eng.tp += delta * 1.15;
+    }, { passive: false });
+
+    /* Драг (мышь + тач) */
+    eng.vp.addEventListener('pointerdown', function (ev) {
+      eng.dragging = true; eng.dragDist = 0; eng.lvx = 0; eng.lvy = 0;
+      eng.lx = ev.clientX; eng.ly = ev.clientY;
+      eng.lastInput = performance.now();
+      eng.vp.style.cursor = 'grabbing';
+    });
+    window.addEventListener('pointermove', function (ev) {
+      if (!eng.dragging) return;
+      var dx = ev.clientX - eng.lx, dy = ev.clientY - eng.ly;
+      eng.lx = ev.clientX; eng.ly = ev.clientY;
+      eng.dragDist += Math.abs(dx) + Math.abs(dy);
+      eng.lvx = eng.lvx * 0.6 + dx * 0.4;
+      eng.lvy = eng.lvy * 0.6 + dy * 0.4;
+      eng.tp -= (eng.rowHorizontal ? dx : dy) * 1.9;
+      eng.lastInput = performance.now();
+    }, { passive: true });
+    window.addEventListener('pointerup', function () {
+      if (!eng.dragging) return;
+      eng.dragging = false;
+      eng.vp.style.cursor = 'grab';
+      eng.tp -= (eng.rowHorizontal ? eng.lvx : eng.lvy) * 24; /* инерция броска */
+      eng.lastInput = performance.now();
+      setTimeout(function () { eng.dragDist = 0; }, 80);
+    }, { passive: true });
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key !== 'Escape') return;
+      if (state.modalSrc) closeModal();
+      else if (state.contactOpen) closeContact();
+    });
+
+    var rt;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () { initHeader(); buildLayout(); }, 160);
+    }, { passive: true });
+
+    initHeader();
+    buildLayout();
+    startLoop();
+    animateFills($('[data-tk="panel-tools"]'));
+    syncFills();
+    applyLang(state.lang);
+    eng.booted = true;
+  }
+
+  function measure() {
+    var r = eng.vp.getBoundingClientRect();
+    eng.vw = r.width;
+    eng.vh = Math.max(r.height, 320);
+    eng.mobile = window.innerWidth <= 980;
+  }
+
+  /* ── Сворачиваемая фикс-шапка (мобилка): скролл сетки вниз — компакт,
+        вверх — разворот. Высоты замеряются без анимаций. ── */
+  function initHeader() {
+    eng.head = eng.head || $('aside[data-tk="left"]');
+    if (!eng.head || !eng.right) return;
+    var mobile = window.innerWidth <= 980;
+    if (!mobile) {
+      if (eng.headInit) {
+        eng.head.classList.remove('tk-collapsed');
+        eng.head.style.height = ''; eng.head.style.transition = '';
+        eng.right.style.paddingTop = ''; eng.right.style.transition = '';
+        eng.headInit = false; eng.headCollapsed = false;
+      }
+      return;
+    }
+    var head = eng.head;
+    var hero = $('div[data-tk="hero"]');
+    head.style.transition = 'none';
+    head.style.height = '';
+    head.classList.remove('tk-collapsed');
+    eng.headExp = head.offsetHeight + 12; /* запас под стрелку-тогглер */
+    if (hero) hero.style.display = 'none';
+    eng.headCol = head.offsetHeight + 16;
+    if (hero) hero.style.display = '';
+    if (eng.headCollapsed) head.classList.add('tk-collapsed');
+    head.style.height = (eng.headCollapsed ? eng.headCol : eng.headExp) + 'px';
+    head.offsetHeight; /* reflow — фиксируем стартовое значение */
+    head.style.transition = 'height .45s cubic-bezier(.32,0,.15,1)';
+    eng.right.style.paddingTop = (eng.headCollapsed ? eng.headCol : eng.headExp) + 'px';
+    eng.right.style.transition = 'padding-top .45s cubic-bezier(.32,0,.15,1)';
+    eng.headInit = true;
+  }
+
+  function setHeader(collapsed) {
+    if (!eng.headInit || eng.headCollapsed === collapsed) return;
+    eng.headCollapsed = collapsed;
+    eng.head.classList.toggle('tk-collapsed', collapsed);
+    eng.head.style.height = (collapsed ? eng.headCol : eng.headExp) + 'px';
+    eng.right.style.paddingTop = (collapsed ? eng.headCol : eng.headExp) + 'px';
+    /* после анимации вьюпорт стал выше/ниже — пересобрать раскладку */
+    clearTimeout(eng.headT);
+    eng.headT = setTimeout(buildLayout, 520);
+  }
+
+  function buildLayout() {
+    if (!eng.vp) return;
+    measure();
+    eng.rowHorizontal = state.view === 'row' && !eng.mobile;
+    eng.right.classList.toggle('tk-row-mode', eng.rowHorizontal);
+    if (eng.rowHorizontal) {
+      buildRowLayout();
+      return;
+    }
+    if (state.view === 'row' && eng.mobile) {
+      buildColumnLayout();
+      return;
+    }
+    var pad = eng.vw > 640 ? 28 : 14;
+    var gap = eng.vw > 640 ? 26 : 16;
+    var ncols = eng.vw >= 860 ? 3 : 2;
+    var frax = ncols === 3 ? [0.30, 0.43, 0.27] : [0.55, 0.45];
+    eng.speeds = ncols === 3 ? [1, 0.66, 1.28] : [1, 0.76];
+    eng.ncols = ncols;
+    var inner = eng.vw - pad * 2 - gap * (ncols - 1);
+    var colX = [], colW = [], x0 = pad;
+    for (var ci = 0; ci < ncols; ci++) { colW[ci] = inner * frax[ci]; colX[ci] = x0; x0 += colW[ci] + gap; }
+
+    for (var i = 0; i < eng.n; i++) {
+      var c = eng.cards[i];
+      c.col = i % ncols;
+      var wf = 0.74 + c.r1 * 0.26;              /* рваная ширина 74–100% колонки */
+      c.w = Math.round(colW[c.col] * wf);
+      c.x = Math.round(colX[c.col] + (c.r2 > 0.5 ? colW[c.col] - c.w : 0)); /* прижим влево/вправо */
+      c.rot = (c.r3 - 0.5) * 2.4;               /* лёгкий собственный наклон */
+      c.el.style.width = c.w + 'px';
+      if (c.ratioEl) c.ratioEl.style.aspectRatio = String(c.nativeAr);
+    }
+
+    eng.gap = gap;
+    eng.ready = false;
+    requestAnimationFrame(function () {
+      flow();
+      if (!eng.t0) eng.t0 = performance.now();
+      eng.ready = true;
+    });
+  }
+
+  /* Горизонтальный режим: одна высота, реальные пропорции каждого видео. */
+  function buildRowLayout() {
+    var pad = eng.vw > 640 ? 28 : 14;
+    var gap = eng.vw > 640 ? 26 : 16;
+    var merchMediaH = eng.merchMediaH || Math.min(390, eng.vh * 0.52);
+    var mediaH = Math.round(Math.min(merchMediaH, eng.vh * 0.62));
+    eng.rowGap = gap;
+    eng.rowPad = pad;
+    eng.ncols = 1;
+    eng.speeds = [1];
+    for (var i = 0; i < eng.n; i++) {
+      var c = eng.cards[i];
+      c.col = 0;
+      c.w = Math.max(150, Math.min(520, Math.round(mediaH * c.nativeAr)));
+      c.x = 0;
+      c.rot = 0;
+      c.el.style.width = c.w + 'px';
+      if (c.ratioEl) c.ratioEl.style.aspectRatio = String(c.nativeAr);
+    }
+    eng.ready = false;
+    requestAnimationFrame(function () {
+      flowRow();
+      if (!eng.t0) eng.t0 = performance.now();
+      eng.ready = true;
+    });
+  }
+
+  /* На мобильном второй режим становится обычной одной колонкой. */
+  function buildColumnLayout() {
+    var pad = 14;
+    var cardW = Math.round(Math.min(420, eng.vw - pad * 2));
+    eng.ncols = 1;
+    eng.speeds = [1];
+    eng.gap = 18;
+    for (var i = 0; i < eng.n; i++) {
+      var c = eng.cards[i];
+      c.col = 0;
+      c.w = cardW;
+      c.x = Math.round((eng.vw - cardW) / 2);
+      c.rot = 0;
+      c.el.style.width = cardW + 'px';
+      if (c.ratioEl) c.ratioEl.style.aspectRatio = String(c.nativeAr);
+    }
+    eng.ready = false;
+    requestAnimationFrame(function () {
+      flow();
+      if (!eng.t0) eng.t0 = performance.now();
+      eng.ready = true;
+    });
+  }
+
+  /* Раскладка по колонкам: высоты карточек берутся из DOM (реальные
+     пропорции видео), интервалы неровные */
+  function flow() {
+    var cursors = eng.ncols === 3 ? [0, 150, 70] : (eng.ncols === 2 ? [0, 110] : [0]); /* вертикальный сдвиг колонок */
+    var maxH = 0;
+    for (var i = 0; i < eng.n; i++) {
+      var c = eng.cards[i];
+      c.h = c.el.offsetHeight || Math.round(c.w / c.nativeAr + 30);
+      if (DATA[i] && DATA[i].num === 5 && c.ratioEl && state.view === 'grid') eng.merchMediaH = c.ratioEl.offsetHeight || Math.round(c.w / c.nativeAr);
+      if (c.h > maxH) maxH = c.h;
+      c.baseY = cursors[c.col];
+      cursors[c.col] += c.h + eng.gap + Math.round(c.r3 * 54); /* неровные интервалы */
+    }
+    eng.loopH = [];
+    for (var k = 0; k < eng.ncols; k++) {
+      eng.loopH[k] = Math.max(cursors[k] + 110, eng.vh + maxH + 120);
+    }
+  }
+
+  function flowRow() {
+    var cursor = eng.rowPad;
+    var maxStep = 0;
+    for (var i = 0; i < eng.n; i++) {
+      var c = eng.cards[i];
+      c.h = c.el.offsetHeight || Math.round(c.w / c.nativeAr + 30);
+      c.baseX = cursor;
+      c.baseY = Math.round((eng.vh - c.h) / 2);
+      cursor += c.w + eng.rowGap;
+      maxStep = Math.max(maxStep, c.w + eng.rowGap);
+    }
+    eng.loopW = Math.max(cursor - eng.rowPad, eng.vw + maxStep * 2);
+  }
+
+  /* Перестроить поток после подгрузки видео (дебаунс) */
+  function scheduleReflow() {
+    clearTimeout(eng.reflowT);
+    eng.reflowT = setTimeout(function () {
+      if (!eng.ready) return;
+      if (state.view === 'row') buildLayout(); else flow();
+    }, 180);
+  }
+
+  function startLoop() {
+    var frame = function (ts) {
+      eng.raf = requestAnimationFrame(frame);
+      gridFrame(ts);
+    };
+    eng.raf = requestAnimationFrame(frame);
+  }
+
+  function gridFrame(ts) {
+    eng.frameCount = (eng.frameCount || 0) + 1;
+    eng.cmx += (eng.mx - eng.cmx) * 0.06;
+    eng.cmy += (eng.my - eng.cmy) * 0.06;
+    if (!eng.ready) return;
+
+    /* Авто-дрейф: сетка живёт сама, пока с ней не взаимодействуют */
+    var idle = !eng.reduced && !state.modalSrc && !state.contactOpen &&
+      eng.hoverCount === 0 && !eng.dragging && (ts - eng.lastInput > 2600);
+    if (idle) eng.tp += 0.45;
+
+    /* Сворачивание шапки от направления пользовательского скролла */
+    if (eng.headInit) {
+      var dtp = eng.tp - (eng.lastTp == null ? eng.tp : eng.lastTp);
+      eng.lastTp = eng.tp;
+      if (ts - eng.lastInput < 250 && dtp !== 0) {
+        if ((dtp > 0) !== (eng.dirAcc > 0)) eng.dirAcc = 0;
+        eng.dirAcc = (eng.dirAcc || 0) + dtp;
+        if (eng.dirAcc > 60) setHeader(true);
+        else if (eng.dirAcc < -60) setHeader(false);
+      }
+    }
+
+    eng.p += (eng.tp - eng.p) * (eng.reduced ? 1 : 0.085);
+    eng.vel = eng.vel * 0.82 + (eng.tp - eng.p) * 0.18;
+    if (eng.rowHorizontal) {
+      rowFrame(ts);
+      return;
+    }
+    var vh = eng.vh;
+    var av = Math.abs(eng.vel);
+    var tilt = eng.reduced ? 0 : Math.max(-7, Math.min(7, eng.vel * 0.016)); /* наклон от скорости */
+
+    for (var i = 0; i < eng.n; i++) {
+      var c = eng.cards[i];
+      var loopH = eng.loopH[c.col];
+      var yw = (c.baseY - eng.p * eng.speeds[c.col]) % loopH;
+      if (yw < 0) yw += loopH;
+      if (yw > loopH - c.h) yw -= loopH;
+
+      if (yw + c.h < -160 || yw > vh + 160) {
+        if (c.lastOff !== 1) {
+          c.lastOff = 1;
+          c.el.style.opacity = '0';
+          c.el.style.pointerEvents = 'none';
+        }
+        if (c.video && !c.video.paused) c.video.pause();
+        continue;
+      }
+      c.lastOff = 0;
+
+      var d = (yw + c.h / 2 - vh / 2) / (vh / 2); /* -1 верх … 1 низ */
+      var ad = Math.abs(d);
+      var adc = Math.min(1, ad);
+      c.hv += (c.hov - c.hv) * 0.12;
+
+      /* сжатие к кромкам + ховер */
+      var scale = (1 - 0.17 * Math.pow(adc, 1.5)) * (1 + c.hv * 0.045);
+      /* блюр: кромки + скорость; на ховере фокус; на мобилке зона уже и мягче */
+      var edgeStart = eng.mobile ? 0.7 : 0.42;
+      var edge = Math.max(0, ad - edgeStart) / (1 - edgeStart);
+      var maxEdgeBlur = eng.mobile ? 5 : 7;
+      var blur = eng.reduced ? 0 : (Math.pow(Math.min(1, edge), 1.6) * maxEdgeBlur + Math.min(3.2, av * 0.012)) * (1 - c.hv);
+      blur = Math.round(blur * 2) / 2;
+      var op = Math.max(0, Math.min(1, 1 - Math.max(0, ad - (eng.mobile ? 0.88 : 0.78)) / 0.5));
+
+      /* вступление */
+      var it = Math.min(1, Math.max(0, (ts - eng.t0 - 150 - c.i * 40) / 650));
+      var ite = 1 - Math.pow(1 - it, 3);
+      op *= ite;
+
+      var px = eng.reduced ? 0 : eng.cmx * (c.col - (eng.ncols - 1) / 2) * 16; /* параллакс колонок от курсора */
+      var y = yw + (1 - ite) * 60;
+      var rot = c.rot * (1 - c.hv);
+
+      c.el.style.transform = 'perspective(1100px) translate3d(' + (c.x + px).toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) rotateX(' + tilt.toFixed(2) + 'deg) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+      if (c.lastBlur !== blur) { c.lastBlur = blur; c.el.style.filter = blur > 0.4 ? 'blur(' + blur + 'px)' : ''; }
+      c.el.style.opacity = op.toFixed(3);
+      c.el.style.zIndex = c.hov ? '50' : String(10 + Math.round((1 - adc) * 9));
+      c.el.style.pointerEvents = op > 0.35 ? 'auto' : 'none';
+
+      if (!c.queued) queueVideo(c, ad < 0.7);
+      var playable = c.loaded && op > 0.25 && ad < 1.05;
+      if (playable && c.video.paused) c.video.play().catch(function () {});
+      else if (!playable && !c.video.paused) c.video.pause();
+    }
+  }
+
+  function rowFrame(ts) {
+    var vw = eng.vw;
+    var av = Math.abs(eng.vel);
+    var tilt = eng.reduced ? 0 : Math.max(-7, Math.min(7, eng.vel * 0.016));
+
+    for (var i = 0; i < eng.n; i++) {
+      var c = eng.cards[i];
+      var xw = (c.baseX - eng.p) % eng.loopW;
+      if (xw < 0) xw += eng.loopW;
+      if (xw > eng.loopW - c.w) xw -= eng.loopW;
+
+      if (xw + c.w < -180 || xw > vw + 180) {
+        if (c.lastOff !== 1) {
+          c.lastOff = 1;
+          c.el.style.opacity = '0';
+          c.el.style.pointerEvents = 'none';
+        }
+        if (c.video && !c.video.paused) c.video.pause();
+        continue;
+      }
+      c.lastOff = 0;
+
+      var d = (xw + c.w / 2 - vw / 2) / (vw / 2);
+      var ad = Math.abs(d);
+      var adc = Math.min(1, ad);
+      c.hv += (c.hov - c.hv) * 0.12;
+
+      var scale = (1 - 0.12 * Math.pow(adc, 1.5)) * (1 + c.hv * 0.045);
+      var edgeStart = eng.mobile ? 0.78 : 0.58;
+      var edge = Math.max(0, ad - edgeStart) / (1 - edgeStart);
+      var blur = eng.reduced ? 0 : (Math.pow(Math.min(1, edge), 1.6) * (eng.mobile ? 4 : 6) + Math.min(3.2, av * 0.012)) * (1 - c.hv);
+      blur = Math.round(blur * 2) / 2;
+      var op = Math.max(0, Math.min(1, 1 - Math.max(0, ad - (eng.mobile ? 0.92 : 0.82)) / 0.42));
+
+      var it = Math.min(1, Math.max(0, (ts - eng.t0 - 150 - c.i * 35) / 650));
+      var ite = 1 - Math.pow(1 - it, 3);
+      op *= ite;
+
+      var y = c.baseY + (eng.reduced ? 0 : eng.cmy * (c.r2 - 0.5) * 18) + (1 - ite) * 36;
+      c.el.style.transform = 'perspective(1100px) translate3d(' + xw.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) rotateY(' + (-tilt).toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+      if (c.lastBlur !== blur) { c.lastBlur = blur; c.el.style.filter = blur > 0.4 ? 'blur(' + blur + 'px)' : ''; }
+      c.el.style.opacity = op.toFixed(3);
+      c.el.style.zIndex = c.hov ? '50' : String(10 + Math.round((1 - adc) * 9));
+      c.el.style.pointerEvents = op > 0.35 ? 'auto' : 'none';
+
+      if (!c.queued) queueVideo(c, ad < 0.9);
+      var playable = c.loaded && op > 0.25 && ad < 1.1;
+      if (playable && c.video.paused) c.video.play().catch(function () {});
+      else if (!playable && !c.video.paused) c.video.pause();
+    }
+  }
+
+  /* ── Очередь загрузки видео (макс 3 параллельно) ── */
+  function queueVideo(c, front) {
+    if (c.queued || !c.video) return;
+    if (!c.video.dataset.src) { c.queued = true; return; }
+    c.queued = true;
+    if (front) eng.loadQueue.unshift(c); else eng.loadQueue.push(c);
+    pumpQueue();
+  }
+
+  function pumpQueue() {
+    while (eng.loadActive < 3 && eng.loadQueue.length) {
+      (function (c) {
+        var v = c.video;
+        if (!v.dataset.src) return;
+        eng.loadActive++;
+        var done = false;
+        var release = function () {
+          if (done) return; done = true;
+          clearTimeout(t);
+          eng.loadActive--;
+          pumpQueue();
+        };
+        var t = setTimeout(release, 8000);
+        v.addEventListener('loadeddata', release, { once: true });
+        v.addEventListener('error', release, { once: true });
+        v.src = v.dataset.src;
+        delete v.dataset.src;
+        v.load();
+      })(eng.loadQueue.shift());
+    }
+  }
+
+  /* ── UI-обработчики ── */
+  function bindUI() {
+    $('[data-tk="langbtn"]').addEventListener('click', function () {
+      state.lang = state.lang === 'ru' ? 'en' : 'ru';
+      applyLang(state.lang);
+    });
+    $('[data-tk="tab-tools"]').addEventListener('click', function () { setTab('tools'); });
+    $('[data-tk="tab-ai"]').addEventListener('click', function () { setTab('ai'); });
+    $('[data-tk="view-grid"]').addEventListener('click', function () { setView('grid'); });
+    $('[data-tk="view-row"]').addEventListener('click', function () { setView('row'); });
+    $('[data-tk="cta"]').addEventListener('click', openContact);
+    $('[data-tk="headtoggle"]').addEventListener('click', function () {
+      if (!eng.headInit) return;
+      eng.dirAcc = 0;
+      eng.lastInput = performance.now() - 1000; /* не даём скролл-логике тут же переключить обратно */
+      setHeader(!eng.headCollapsed);
+    });
+    $('[data-tk="contact-close"]').addEventListener('click', closeContact);
+    $('[data-tk="contact-backdrop"]').addEventListener('click', closeContact);
+    $('[data-tk="modal-close"]').addEventListener('click', closeModal);
+    $('[data-tk="modal"]').addEventListener('click', function (e) {
+      if (e.target && e.target.dataset && e.target.dataset.tk === 'modal') closeModal();
+    });
+  }
+
+  /* ── Старт ── */
+  function boot() {
+    bootPreloader();
+    applyLang(state.lang);
+    buildCards();
+    bindUI();
+    initEngine();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+}());
+</script>
+</body>
+</html>
