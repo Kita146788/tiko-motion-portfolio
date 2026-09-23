@@ -394,7 +394,7 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
   ];
 
   /* Первые кейсы идут в заданном порядке, остальные сохраняют исходную очередь. */
-  var FEATURED_ORDER = [11, 12, 10, 6, 7, 1, 22, 17];
+  var FEATURED_ORDER = [11, 12, 10, 6, 7, 23, 1, 22, 17];
   var CASE_ORDER = FEATURED_ORDER.slice();
   for (var caseNo = 1; caseNo <= DATA.length; caseNo++) {
     if (FEATURED_ORDER.indexOf(caseNo) === -1) CASE_ORDER.push(caseNo);
@@ -483,8 +483,8 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
     var html = '';
     for (var i = 0; i < DATA.length; i++) {
       var d = DATA[i];
-      var caseNumber = d.num || (i + 1);
-      var num = (caseNumber < 10 ? '0' : '') + caseNumber;
+      var displayNumber = i + 1;
+      var num = (displayNumber < 10 ? '0' : '') + displayNumber;
       html +=
         '<div data-tk="card" data-ratio="' + d.ratio + '" data-idx="' + i + '" style="position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; will-change: transform, filter, opacity;">' +
           '<div data-tk="ratio" style="position: relative; overflow: hidden; border-radius: 10px; background: var(--card); border: 1px solid var(--line); transition: border-color .25s ease;">' +
@@ -842,8 +842,7 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
   function buildRowLayout() {
     var pad = eng.vw > 640 ? 28 : 14;
     var gap = eng.vw > 640 ? 26 : 16;
-    var merchMediaH = eng.merchMediaH || Math.min(390, eng.vh * 0.52);
-    var mediaH = Math.round(Math.min(merchMediaH, eng.vh * 0.62));
+    var mediaH = Math.round(Math.min(480, eng.vh * 0.68));
     eng.rowGap = gap;
     eng.rowPad = pad;
     eng.ncols = 1;
