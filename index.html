@@ -422,7 +422,7 @@ aside[data-tk="left"].tk-collapsed button[data-tk="headtoggle"] svg { transform:
   });
   VIDEO_AR = CASE_ORDER.map(function (number) { return ORIGINAL_VIDEO_AR[number - 1]; });
 
-  var state = { lang: 'ru', view: window.innerWidth <= 980 ? 'grid' : 'row', modalSrc: null, contactOpen: false };
+  var state = { lang: 'ru', view: 'grid', modalSrc: null, contactOpen: false };
   var eng = {
     p: 0, tp: 0, vel: 0, mx: 0, my: 0, cmx: 0, cmy: 0,
     raf: null, ready: false, dragging: false, dragDist: 0,
